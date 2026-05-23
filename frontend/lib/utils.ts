@@ -7,9 +7,9 @@ export function getRecommendationStyle(rec: string): string {
     case "Hire":
       return "bg-green-500/20 text-green-300 border border-green-500/30"
     case "Consider":
-      return "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+      return "bg-yellow-500/30 text-yellow-200 border border-yellow-400/60"
     case "Borderline":
-      return "bg-orange-500/20 text-orange-300 border border-orange-500/30"
+      return "bg-orange-500/30 text-orange-200 border border-orange-400/60"
     case "Do Not Hire":
       return "bg-red-500/20 text-red-400 border border-red-500/30"
     default:
@@ -20,13 +20,13 @@ export function getRecommendationStyle(rec: string): string {
 export function getConfidenceStyle(conf: string): string {
   switch (conf) {
     case "High":
-      return "bg-sky-500/20 text-sky-300 border border-sky-500/30"
+      return "bg-sky-500/30 text-sky-200 border border-sky-400/60"
     case "Medium":
-      return "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"
+      return "bg-yellow-500/30 text-yellow-200 border border-yellow-400/60"
     case "Low":
-      return "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+      return "bg-slate-500/30 text-slate-300 border border-slate-400/60"
     default:
-      return "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+      return "bg-slate-500/30 text-slate-300 border border-slate-400/60"
   }
 }
 
@@ -53,9 +53,9 @@ export function getGradeBadgeStyle(grade: string): string {
     case "B":
       return "bg-green-500/20 text-green-300 border border-green-500/40"
     case "C":
-      return "bg-yellow-500/20 text-yellow-300 border border-yellow-500/40"
+      return "bg-yellow-500/30 text-yellow-200 border border-yellow-400/60"
     case "D":
-      return "bg-orange-500/20 text-orange-300 border border-orange-500/40"
+      return "bg-orange-500/30 text-orange-200 border border-orange-400/60"
     case "F":
       return "bg-red-500/20 text-red-400 border border-red-500/40"
     default:

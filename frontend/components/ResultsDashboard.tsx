@@ -2,19 +2,35 @@
 
 import { useState } from "react"
 import { CandidateResult, JdSummary } from "@/types"
-import {
-  getRecommendationStyle,
-  getConfidenceStyle,
-  getScoreColor,
-  getScoreBarColor,
-  getGradeBadgeStyle,
-} from "@/lib/utils"
+import { getScoreColor, getScoreBarColor } from "@/lib/utils"
 import CandidatePanel from "./CandidatePanel"
 
 interface ResultsDashboardProps {
   candidates: CandidateResult[]
   jdSummary: JdSummary | null
   onReset: () => void
+}
+
+const gradeStyles: Record<string, React.CSSProperties> = {
+  "A": { background: "rgba(16,185,129,0.2)",  color: "#6ee7b7", border: "1px solid rgba(16,185,129,0.4)" },
+  "B": { background: "rgba(34,197,94,0.2)",   color: "#86efac", border: "1px solid rgba(34,197,94,0.4)" },
+  "C": { background: "rgba(234,179,8,0.25)",  color: "#fde047", border: "1px solid rgba(234,179,8,0.5)" },
+  "D": { background: "rgba(249,115,22,0.25)", color: "#fdba74", border: "1px solid rgba(249,115,22,0.5)" },
+  "F": { background: "rgba(239,68,68,0.2)",   color: "#fca5a5", border: "1px solid rgba(239,68,68,0.4)" },
+}
+
+const recommendationStyles: Record<string, React.CSSProperties> = {
+  "Strong Hire": { background: "rgba(16,185,129,0.2)",  color: "#6ee7b7", border: "1px solid rgba(16,185,129,0.3)" },
+  "Hire":        { background: "rgba(34,197,94,0.2)",   color: "#86efac", border: "1px solid rgba(34,197,94,0.3)" },
+  "Consider":    { background: "rgba(234,179,8,0.25)",  color: "#fde047", border: "1px solid rgba(234,179,8,0.5)" },
+  "Borderline":  { background: "rgba(249,115,22,0.25)", color: "#fdba74", border: "1px solid rgba(249,115,22,0.5)" },
+  "Do Not Hire": { background: "rgba(239,68,68,0.2)",   color: "#fca5a5", border: "1px solid rgba(239,68,68,0.4)" },
+}
+
+const confidenceStyles: Record<string, React.CSSProperties> = {
+  "High":   { background: "rgba(14,165,233,0.25)",  color: "#7dd3fc", border: "1px solid rgba(14,165,233,0.5)" },
+  "Medium": { background: "rgba(234,179,8,0.25)",   color: "#fde047", border: "1px solid rgba(234,179,8,0.5)" },
+  "Low":    { background: "rgba(100,116,139,0.25)", color: "#cbd5e1", border: "1px solid rgba(100,116,139,0.5)" },
 }
 
 export default function ResultsDashboard({ candidates, jdSummary, onReset }: ResultsDashboardProps) {
@@ -91,7 +107,6 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
               </p>
             </div>
             <div className="grid grid-cols-2 gap-x-8 gap-y-4 md:grid-cols-4">
-              {/* Required Skills */}
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Required Skills</p>
                 <div className="flex flex-wrap gap-1.5">
@@ -103,7 +118,6 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
                 </div>
               </div>
 
-              {/* Nice to Have */}
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Nice to Have</p>
                 <div className="flex flex-wrap gap-1.5">
@@ -115,13 +129,11 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
                 </div>
               </div>
 
-              {/* Experience */}
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Experience</p>
                 <span className="text-sm text-slate-300">{jdSummary.experience_years}</span>
               </div>
 
-              {/* Key Responsibilities */}
               {jdSummary.key_responsibilities.length > 0 && (
                 <div>
                   <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">Key Responsibilities</p>
@@ -188,19 +200,28 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
                 </div>
 
                 <div className="flex items-center pr-4">
-                  <span className={`text-xs px-2 py-0.5 rounded font-bold ${getGradeBadgeStyle(c.grade)}`}>
+                  <span
+                    style={gradeStyles[c.grade] ?? gradeStyles["F"]}
+                    className="text-xs px-2 py-0.5 rounded font-bold"
+                  >
                     {c.grade}
                   </span>
                 </div>
 
                 <div className="flex items-center pr-4">
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium truncate ${getRecommendationStyle(c.recommendation)}`}>
+                  <span
+                    style={recommendationStyles[c.recommendation] ?? recommendationStyles["Do Not Hire"]}
+                    className="text-xs px-2.5 py-1 rounded-full font-medium truncate"
+                  >
                     {c.recommendation}
                   </span>
                 </div>
 
                 <div className="flex items-center">
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getConfidenceStyle(c.confidence)}`}>
+                  <span
+                    style={confidenceStyles[c.confidence] ?? confidenceStyles["Low"]}
+                    className="text-xs px-2.5 py-1 rounded-full font-medium"
+                  >
                     {c.confidence}
                   </span>
                 </div>
@@ -214,7 +235,6 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
         </p>
       </div>
 
-      {/* Side panel */}
       <CandidatePanel
         candidate={selectedCandidate}
         rank={selectedIndex !== null ? selectedIndex + 1 : 1}
