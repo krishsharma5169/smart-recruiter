@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from typing import List
 from services.parser import extract_text
 from services.agent import score_resume
@@ -16,28 +16,31 @@ async def analyze(
     jd: UploadFile = File(...),
     resumes: List[UploadFile] = File(...)
 ):
+    if not resumes:
+        raise HTTPException(status_code=400, detail="At least one resume is required.")
+
     try:
         jd_text = await extract_text(jd)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
     if not jd_text.strip():
-        raise HTTPException(status_code=400, detail="Job description is empty")
+        raise HTTPException(status_code=400, detail="Job description is empty.")
 
     scored = []
     for resume in resumes:
         try:
             resume_text = await extract_text(resume)
-            result = await score_resume(jd_text, resume_text)
-            scored.append(result)
-        except Exception as e:
-            scored.append({
+            result = await score_resume(jd_text, resume_text, resume.filename)
+        except ValueError as e:
+            result = {
                 "name": resume.filename,
                 "score": 0,
-                "reasoning": f"Failed to process: {str(e)}",
+                "reasoning": str(e),
                 "strengths": [],
                 "gaps": ["Could not be parsed"]
-            })
+            }
+        scored.append(result)
 
     ranked = rank_candidates(scored)
     return AnalyzeResponse(results=ranked, total_candidates=len(ranked))
