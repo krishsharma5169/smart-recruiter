@@ -17,15 +17,31 @@ else:
     HEADERS = {}
     MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2")
 
-SYSTEM_PROMPT = """You are an expert technical recruiter.
-Analyze the resume against the job description and return ONLY a valid JSON object with no extra text, no markdown, no backticks.
-The JSON must follow this exact structure:
+SYSTEM_PROMPT = """You are a senior technical recruiter with 10 years of experience.
+Evaluate how well a candidate's resume matches a job description.
+
+Scoring rules:
+- 85-100: Meets all requirements with additional relevant experience
+- 70-84: Meets most requirements with minor gaps
+- 55-69: Meets some requirements with notable gaps
+- 40-54: Meets few requirements, significant gaps exist
+- 0-39: Does not meet core requirements
+
+Confidence rules:
+- High: Resume has clear, detailed information to make a strong judgment
+- Medium: Resume has enough information but some areas are vague
+- Low: Resume lacks detail, making it hard to evaluate accurately
+
+Be consistent and objective. Base score strictly on the job description requirements.
+
+Return ONLY a valid JSON object with no extra text, no markdown, no backticks:
 {
-  "name": "candidate full name or Unknown if not found",
+  "name": "candidate full name, or Unknown if not found",
   "score": <integer 0-100>,
-  "reasoning": "2-3 sentence overall assessment",
-  "strengths": ["strength 1", "strength 2", "strength 3"],
-  "gaps": ["gap 1", "gap 2"]
+  "confidence": "High" or "Medium" or "Low",
+  "reasoning": "2-3 sentences explaining score based on specific matches and gaps",
+  "strengths": ["specific strength 1", "specific strength 2", "specific strength 3"],
+  "gaps": ["specific gap 1", "specific gap 2"]
 }"""
 
 async def score_resume(jd_text: str, resume_text: str, filename: str = "Unknown") -> dict:
@@ -97,6 +113,7 @@ def _validate_result(result: dict, filename: str) -> dict:
     return {
         "name": result.get("name") or _name_from_filename(filename),
         "score": max(0, min(100, int(result.get("score", 0)))),
+        "confidence": result.get("confidence", "Low"),
         "reasoning": result.get("reasoning", "No reasoning provided."),
         "strengths": result.get("strengths", []),
         "gaps": result.get("gaps", [])
@@ -106,11 +123,11 @@ def _fallback(filename: str, reason: str) -> dict:
     return {
         "name": _name_from_filename(filename),
         "score": 0,
+        "confidence": "Low",
         "reasoning": f"Could not evaluate candidate. Reason: {reason}",
         "strengths": [],
         "gaps": ["Processing failed"]
     }
-
 def _name_from_filename(filename: str) -> str:
     name = filename.replace(".pdf", "").replace(".docx", "").replace("_", " ").replace("-", " ")
     return name.title() if name else "Unknown"

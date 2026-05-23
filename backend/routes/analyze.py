@@ -1,15 +1,46 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import StreamingResponse
 from typing import List
+import asyncio
+import json
 from services.parser import extract_text
 from services.agent import score_resume
 from services.ranker import rank_candidates
-from models import AnalyzeResponse
+from models import AnalyzeResponse, CandidateResult
 
 router = APIRouter()
+
+MAX_FILE_SIZE = 5 * 1024 * 1024
+MAX_RESUMES = 10
 
 @router.get("/health")
 async def health():
     return {"status": "ok"}
+
+async def process_resume(resume: UploadFile, jd_text: str) -> dict:
+    if resume.size and resume.size > MAX_FILE_SIZE:
+        return {
+            "name": resume.filename,
+            "score": 0,
+            "confidence": "Low",
+            "reasoning": f"{resume.filename} exceeds the 5MB file size limit.",
+            "strengths": [],
+            "gaps": ["File too large"]
+        }
+    try:
+        resume_text = await extract_text(resume)
+        if not resume_text.strip():
+            raise ValueError("Resume appears to be empty.")
+        return await score_resume(jd_text, resume_text, resume.filename)
+    except ValueError as e:
+        return {
+            "name": resume.filename,
+            "score": 0,
+            "confidence": "Low",
+            "reasoning": str(e),
+            "strengths": [],
+            "gaps": ["Could not be parsed"]
+        }
 
 @router.post("/analyze", response_model=AnalyzeResponse)
 async def analyze(
@@ -19,6 +50,12 @@ async def analyze(
     if not resumes:
         raise HTTPException(status_code=400, detail="At least one resume is required.")
 
+    if len(resumes) > MAX_RESUMES:
+        raise HTTPException(status_code=400, detail=f"Maximum {MAX_RESUMES} resumes allowed per request.")
+
+    if jd.size and jd.size > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="Job description exceeds 5MB limit.")
+
     try:
         jd_text = await extract_text(jd)
     except ValueError as e:
@@ -27,20 +64,54 @@ async def analyze(
     if not jd_text.strip():
         raise HTTPException(status_code=400, detail="Job description is empty.")
 
-    scored = []
-    for resume in resumes:
-        try:
-            resume_text = await extract_text(resume)
-            result = await score_resume(jd_text, resume_text, resume.filename)
-        except ValueError as e:
-            result = {
-                "name": resume.filename,
-                "score": 0,
-                "reasoning": str(e),
-                "strengths": [],
-                "gaps": ["Could not be parsed"]
-            }
-        scored.append(result)
-
-    ranked = rank_candidates(scored)
+    tasks = [process_resume(resume, jd_text) for resume in resumes]
+    scored = await asyncio.gather(*tasks)
+    ranked = rank_candidates(list(scored))
     return AnalyzeResponse(results=ranked, total_candidates=len(ranked))
+
+@router.post("/analyze/stream")
+async def analyze_stream(
+    jd: UploadFile = File(...),
+    resumes: List[UploadFile] = File(...)
+):
+    if not resumes:
+        raise HTTPException(status_code=400, detail="At least one resume is required.")
+
+    if len(resumes) > MAX_RESUMES:
+        raise HTTPException(status_code=400, detail=f"Maximum {MAX_RESUMES} resumes allowed per request.")
+
+    if jd.size and jd.size > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="Job description exceeds 5MB limit.")
+
+    try:
+        jd_text = await extract_text(jd)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if not jd_text.strip():
+        raise HTTPException(status_code=400, detail="Job description is empty.")
+
+    async def generate():
+        tasks = {
+            asyncio.ensure_future(process_resume(resume, jd_text)): resume.filename
+            for resume in resumes
+        }
+        pending = set(tasks.keys())
+
+        while pending:
+            done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
+            for task in done:
+                result = task.result()
+                from services.ranker import _get_grade, _get_recommendation
+                score = max(0, min(100, int(result.get("score", 0))))
+                enriched = {
+                    **result,
+                    "score": score,
+                    "grade": _get_grade(score),
+                    "recommendation": _get_recommendation(score)
+                }
+                yield f"data: {json.dumps(enriched)}\n\n"
+
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(generate(), media_type="text/event-stream")

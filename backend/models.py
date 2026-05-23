@@ -6,6 +6,7 @@ class CandidateResult(BaseModel):
     score: int
     grade: str
     recommendation: str
+    confidence: str
     reasoning: str
     strengths: List[str]
     gaps: List[str]

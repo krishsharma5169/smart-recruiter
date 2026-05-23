@@ -25,6 +25,7 @@ def rank_candidates(results: List[dict]) -> List[CandidateResult]:
             score=score,
             grade=_get_grade(score),
             recommendation=_get_recommendation(score),
+            confidence=r.get("confidence", "Low"),
             reasoning=r.get("reasoning", ""),
             strengths=r.get("strengths", []),
             gaps=r.get("gaps", [])
