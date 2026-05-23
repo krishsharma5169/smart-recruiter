@@ -5,8 +5,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-OLLAMA_URL = os.getenv("OLLAMA_URL")
-MODEL_NAME = os.getenv("MODEL_NAME")
+USE_CHUTES = os.getenv("USE_CHUTES", "false").lower() == "true"
+
+if USE_CHUTES:
+    API_URL = os.getenv("CHUTES_URL")
+    API_KEY = os.getenv("CHUTES_API_KEY")
+    HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+    MODEL_NAME = "deepseek-ai/DeepSeek-V3-0324"
+else:
+    API_URL = os.getenv("OLLAMA_URL")
+    HEADERS = {}
+    MODEL_NAME = os.getenv("MODEL_NAME", "llama3.2")
 
 SYSTEM_PROMPT = """You are an expert technical recruiter.
 Analyze the resume against the job description and return ONLY a valid JSON object with no extra text, no markdown, no backticks.
@@ -39,16 +48,20 @@ Evaluate this candidate and return only the JSON result."""
 
     try:
         async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(OLLAMA_URL, json=payload)
+            response = await client.post(API_URL, json=payload, headers=HEADERS)
             response.raise_for_status()
 
-        raw = response.json()["message"]["content"]
+        if USE_CHUTES:
+            raw = response.json()["choices"][0]["message"]["content"]
+        else:
+            raw = response.json()["message"]["content"]
+
         return _parse_response(raw, filename)
 
     except httpx.TimeoutException:
-        return _fallback(filename, "Ollama request timed out.")
+        return _fallback(filename, "Request timed out.")
     except httpx.HTTPStatusError as e:
-        return _fallback(filename, f"Ollama HTTP error: {e.response.status_code}")
+        return _fallback(filename, f"HTTP error: {e.response.status_code}")
     except Exception as e:
         return _fallback(filename, str(e))
 
