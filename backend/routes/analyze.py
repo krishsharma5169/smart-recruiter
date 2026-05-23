@@ -12,6 +12,9 @@ router = APIRouter()
 
 MAX_FILE_SIZE = 5 * 1024 * 1024
 MAX_RESUMES = 10
+MIN_JD_LENGTH = 100
+MIN_RESUME_LENGTH = 50
+MAX_JD_LENGTH = 10000
 
 @router.get("/health")
 async def health():
@@ -29,9 +32,22 @@ async def process_resume(resume: UploadFile, jd_text: str) -> dict:
         }
     try:
         resume_text = await extract_text(resume)
+
         if not resume_text.strip():
             raise ValueError("Resume appears to be empty.")
+
+        if len(resume_text.strip()) < MIN_RESUME_LENGTH:
+            return {
+                "name": resume.filename,
+                "score": 0,
+                "confidence": "Low",
+                "reasoning": "Resume content is too short to evaluate accurately.",
+                "strengths": [],
+                "gaps": ["Insufficient resume content"]
+            }
+
         return await score_resume(jd_text, resume_text, resume.filename)
+
     except ValueError as e:
         return {
             "name": resume.filename,
@@ -56,6 +72,10 @@ async def analyze(
     if jd.size and jd.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="Job description exceeds 5MB limit.")
 
+    filenames = [r.filename for r in resumes]
+    if len(filenames) != len(set(filenames)):
+        raise HTTPException(status_code=400, detail="Duplicate resume filenames detected. Please upload unique files.")
+
     try:
         jd_text = await extract_text(jd)
     except ValueError as e:
@@ -63,6 +83,12 @@ async def analyze(
 
     if not jd_text.strip():
         raise HTTPException(status_code=400, detail="Job description is empty.")
+
+    if len(jd_text.strip()) < MIN_JD_LENGTH:
+        raise HTTPException(status_code=400, detail="Job description is too short. Please provide a detailed JD.")
+
+    if len(jd_text) > MAX_JD_LENGTH:
+        jd_text = jd_text[:MAX_JD_LENGTH]
 
     jd_summary, scored = await asyncio.gather(
         extract_jd_requirements(jd_text),
@@ -91,6 +117,10 @@ async def analyze_stream(
     if jd.size and jd.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="Job description exceeds 5MB limit.")
 
+    filenames = [r.filename for r in resumes]
+    if len(filenames) != len(set(filenames)):
+        raise HTTPException(status_code=400, detail="Duplicate resume filenames detected. Please upload unique files.")
+
     try:
         jd_text = await extract_text(jd)
     except ValueError as e:
@@ -98,6 +128,12 @@ async def analyze_stream(
 
     if not jd_text.strip():
         raise HTTPException(status_code=400, detail="Job description is empty.")
+
+    if len(jd_text.strip()) < MIN_JD_LENGTH:
+        raise HTTPException(status_code=400, detail="Job description is too short. Please provide a detailed JD.")
+
+    if len(jd_text) > MAX_JD_LENGTH:
+        jd_text = jd_text[:MAX_JD_LENGTH]
 
     async def generate():
         jd_summary = await extract_jd_requirements(jd_text)
