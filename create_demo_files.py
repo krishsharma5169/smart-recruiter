@@ -2,7 +2,7 @@ from reportlab.pdfgen import canvas
 from docx import Document
 import os
 
-os.makedirs("demo_files", exist_ok=True)
+os.makedirs("backend/demo/demo_files", exist_ok=True)
 
 def make_pdf(filename, lines):
     c = canvas.Canvas(f"demo_files/{filename}")
