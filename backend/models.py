@@ -14,3 +14,15 @@ class CandidateResult(BaseModel):
 class AnalyzeResponse(BaseModel):
     results: List[CandidateResult]
     total_candidates: int
+
+class JDSummary(BaseModel):
+    job_title: str
+    required_skills: List[str]
+    nice_to_have: List[str]
+    experience_years: str
+    key_responsibilities: List[str]
+
+class AnalyzeResponse(BaseModel):
+    jd_summary: JDSummary
+    results: List[CandidateResult]
+    total_candidates: int

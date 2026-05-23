@@ -4,9 +4,9 @@ from typing import List
 import asyncio
 import json
 from services.parser import extract_text
-from services.agent import score_resume
-from services.ranker import rank_candidates
-from models import AnalyzeResponse, CandidateResult
+from services.agent import score_resume, extract_jd_requirements
+from services.ranker import rank_candidates, _get_grade, _get_recommendation
+from models import AnalyzeResponse, CandidateResult, JDSummary
 
 router = APIRouter()
 
@@ -64,10 +64,18 @@ async def analyze(
     if not jd_text.strip():
         raise HTTPException(status_code=400, detail="Job description is empty.")
 
-    tasks = [process_resume(resume, jd_text) for resume in resumes]
-    scored = await asyncio.gather(*tasks)
+    jd_summary, scored = await asyncio.gather(
+        extract_jd_requirements(jd_text),
+        asyncio.gather(*[process_resume(resume, jd_text) for resume in resumes])
+    )
+
     ranked = rank_candidates(list(scored))
-    return AnalyzeResponse(results=ranked, total_candidates=len(ranked))
+
+    return AnalyzeResponse(
+        jd_summary=JDSummary(**jd_summary),
+        results=ranked,
+        total_candidates=len(ranked)
+    )
 
 @router.post("/analyze/stream")
 async def analyze_stream(
@@ -92,6 +100,9 @@ async def analyze_stream(
         raise HTTPException(status_code=400, detail="Job description is empty.")
 
     async def generate():
+        jd_summary = await extract_jd_requirements(jd_text)
+        yield f"data: {json.dumps({'type': 'jd_summary', 'data': jd_summary})}\n\n"
+
         tasks = {
             asyncio.ensure_future(process_resume(resume, jd_text)): resume.filename
             for resume in resumes
@@ -102,13 +113,15 @@ async def analyze_stream(
             done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
             for task in done:
                 result = task.result()
-                from services.ranker import _get_grade, _get_recommendation
                 score = max(0, min(100, int(result.get("score", 0))))
                 enriched = {
-                    **result,
-                    "score": score,
-                    "grade": _get_grade(score),
-                    "recommendation": _get_recommendation(score)
+                    "type": "candidate",
+                    "data": {
+                        **result,
+                        "score": score,
+                        "grade": _get_grade(score),
+                        "recommendation": _get_recommendation(score)
+                    }
                 }
                 yield f"data: {json.dumps(enriched)}\n\n"
 

@@ -131,3 +131,69 @@ def _fallback(filename: str, reason: str) -> dict:
 def _name_from_filename(filename: str) -> str:
     name = filename.replace(".pdf", "").replace(".docx", "").replace("_", " ").replace("-", " ")
     return name.title() if name else "Unknown"
+
+async def extract_jd_requirements(jd_text: str) -> dict:
+    prompt = f"""You are an expert recruiter. Extract the key requirements from this job description.
+
+Job Description:
+{jd_text}
+
+Return ONLY a valid JSON object with no extra text, no markdown, no backticks:
+{{
+  "job_title": "extracted job title",
+  "required_skills": ["skill 1", "skill 2", "skill 3"],
+  "nice_to_have": ["skill 1", "skill 2"],
+  "experience_years": "e.g. 3+ years or Not specified",
+  "key_responsibilities": ["responsibility 1", "responsibility 2"]
+}}"""
+
+    payload = {
+        "model": MODEL_NAME,
+        "messages": [
+            {"role": "system", "content": "You are an expert recruiter that extracts structured data from job descriptions. Return only valid JSON."},
+            {"role": "user", "content": prompt}
+        ],
+        "stream": False
+    }
+
+    fallback = {
+        "job_title": "Unknown",
+        "required_skills": [],
+        "nice_to_have": [],
+        "experience_years": "Not specified",
+        "key_responsibilities": []
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(API_URL, json=payload, headers=HEADERS)
+            response.raise_for_status()
+
+        if USE_CHUTES:
+            raw = response.json()["choices"][0]["message"]["content"]
+        else:
+            raw = response.json()["message"]["content"]
+
+        cleaned = raw.strip()
+        if "```" in cleaned:
+            parts = cleaned.split("```")
+            for part in parts:
+                part = part.strip()
+                if part.startswith("json"):
+                    part = part[4:].strip()
+                if part.startswith("{"):
+                    cleaned = part
+                    break
+
+        result = json.loads(cleaned)
+
+        return {
+            "job_title": result.get("job_title", "Unknown"),
+            "required_skills": result.get("required_skills", []),
+            "nice_to_have": result.get("nice_to_have", []),
+            "experience_years": result.get("experience_years", "Not specified"),
+            "key_responsibilities": result.get("key_responsibilities", [])
+        }
+
+    except Exception as e:
+        return fallback
