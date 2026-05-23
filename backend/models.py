@@ -11,9 +11,6 @@ class CandidateResult(BaseModel):
     strengths: List[str]
     gaps: List[str]
 
-class AnalyzeResponse(BaseModel):
-    results: List[CandidateResult]
-    total_candidates: int
 
 class JDSummary(BaseModel):
     job_title: str

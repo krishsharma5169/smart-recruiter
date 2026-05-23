@@ -6,7 +6,7 @@ import json
 from services.parser import extract_text
 from services.agent import score_resume, extract_jd_requirements
 from services.ranker import rank_candidates, _get_grade, _get_recommendation
-from models import AnalyzeResponse, CandidateResult, JDSummary
+from models import AnalyzeResponse, JDSummary
 
 router = APIRouter()
 

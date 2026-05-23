@@ -128,6 +128,7 @@ def _fallback(filename: str, reason: str) -> dict:
         "strengths": [],
         "gaps": ["Processing failed"]
     }
+
 def _name_from_filename(filename: str) -> str:
     name = filename.replace(".pdf", "").replace(".docx", "").replace("_", " ").replace("-", " ")
     return name.title() if name else "Unknown"
