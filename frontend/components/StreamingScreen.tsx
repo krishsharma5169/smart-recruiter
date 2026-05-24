@@ -1,13 +1,28 @@
 "use client"
 
 import { CandidateResult, JdSummary } from "@/types"
-import { getRecommendationStyle, getScoreColor } from "@/lib/utils"
 
 interface StreamingScreenProps {
   candidates: CandidateResult[]
   total: number
   currentCount: number
   jdSummary: JdSummary | null
+}
+
+const gradeStyles: Record<string, React.CSSProperties> = {
+  "A": { background: "rgba(16,185,129,0.2)",  color: "#6ee7b7", border: "1px solid rgba(16,185,129,0.4)" },
+  "B": { background: "rgba(34,197,94,0.2)",   color: "#86efac", border: "1px solid rgba(34,197,94,0.4)" },
+  "C": { background: "rgba(234,179,8,0.25)",  color: "#fde047", border: "1px solid rgba(234,179,8,0.5)" },
+  "D": { background: "rgba(249,115,22,0.25)", color: "#fdba74", border: "1px solid rgba(249,115,22,0.5)" },
+  "F": { background: "rgba(239,68,68,0.2)",   color: "#fca5a5", border: "1px solid rgba(239,68,68,0.4)" },
+}
+
+function getScoreInlineColor(score: number): string {
+  if (score >= 85) return "#34d399"
+  if (score >= 70) return "#4ade80"
+  if (score >= 55) return "#facc15"
+  if (score >= 40) return "#fb923c"
+  return "#f87171"
 }
 
 export default function StreamingScreen({ candidates, total, currentCount, jdSummary }: StreamingScreenProps) {
@@ -82,10 +97,13 @@ export default function StreamingScreen({ candidates, total, currentCount, jdSum
                   <p className="text-sm font-medium text-slate-200 truncate">{c.name}</p>
                   <p className="text-xs text-slate-500">{c.recommendation}</p>
                 </div>
-                <span className={`text-lg font-bold ${getScoreColor(c.score)}`}>
+                <span style={{ color: getScoreInlineColor(c.score) }} className="text-lg font-bold">
                   {c.score}
                 </span>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getRecommendationStyle(c.recommendation)}`}>
+                <span
+                  style={gradeStyles[c.grade] ?? gradeStyles["F"]}
+                  className="text-xs px-2 py-0.5 rounded-full font-medium"
+                >
                   {c.grade}
                 </span>
               </div>

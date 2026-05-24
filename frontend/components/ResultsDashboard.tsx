@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { CandidateResult, JdSummary } from "@/types"
-import { getScoreColor, getScoreBarColor } from "@/lib/utils"
+import { getScoreBarColor } from "@/lib/utils"
 import CandidatePanel from "./CandidatePanel"
 
 interface ResultsDashboardProps {
@@ -31,6 +31,14 @@ const confidenceStyles: Record<string, React.CSSProperties> = {
   "High":   { background: "rgba(14,165,233,0.25)",  color: "#7dd3fc", border: "1px solid rgba(14,165,233,0.5)" },
   "Medium": { background: "rgba(234,179,8,0.25)",   color: "#fde047", border: "1px solid rgba(234,179,8,0.5)" },
   "Low":    { background: "rgba(100,116,139,0.25)", color: "#cbd5e1", border: "1px solid rgba(100,116,139,0.5)" },
+}
+
+function getScoreInlineColor(score: number): string {
+  if (score >= 85) return "#34d399"
+  if (score >= 70) return "#4ade80"
+  if (score >= 55) return "#facc15"
+  if (score >= 40) return "#fb923c"
+  return "#f87171"
 }
 
 export default function ResultsDashboard({ candidates, jdSummary, onReset }: ResultsDashboardProps) {
@@ -87,7 +95,7 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
             {topCandidate ? (
               <>
                 <p className="text-base font-bold text-white truncate">{topCandidate.name}</p>
-                <p className={`text-sm font-semibold ${getScoreColor(topCandidate.score)}`}>
+                <p style={{ color: getScoreInlineColor(topCandidate.score) }} className="text-sm font-semibold">
                   Score: {topCandidate.score}
                 </p>
               </>
@@ -194,7 +202,7 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
                       style={{ width: `${c.score}%` }}
                     />
                   </div>
-                  <span className={`text-sm font-bold flex-shrink-0 ${getScoreColor(c.score)}`}>
+                  <span style={{ color: getScoreInlineColor(c.score) }} className="text-sm font-bold flex-shrink-0">
                     {c.score}
                   </span>
                 </div>
