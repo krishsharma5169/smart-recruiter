@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect, useRef } from "react"
 import { CandidateResult, JdSummary } from "@/types"
 
 interface StreamingScreenProps {
@@ -25,6 +26,37 @@ function getScoreInlineColor(score: number): string {
   return "#f87171"
 }
 
+function AnimatedScore({ target }: { target: number }) {
+  const [display, setDisplay] = useState(0)
+  const frameRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const duration = 800
+    const start = performance.now()
+
+    const animate = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(Math.round(eased * target))
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    frameRef.current = requestAnimationFrame(animate)
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+    }
+  }, [target])
+
+  return (
+    <span style={{ color: getScoreInlineColor(target) }} className="text-lg font-bold tabular-nums">
+      {display}
+    </span>
+  )
+}
+
 export default function StreamingScreen({ candidates, total, currentCount, jdSummary }: StreamingScreenProps) {
   const progress = total > 0 ? (currentCount / total) * 100 : 0
 
@@ -32,15 +64,13 @@ export default function StreamingScreen({ candidates, total, currentCount, jdSum
     <div className="min-h-screen bg-[#0a0f1e] px-6 py-12">
       <div className="max-w-2xl mx-auto">
 
-        {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-2xl font-bold text-white mb-1">
             Smart<span className="text-sky-400">Recruiter</span>
           </h1>
           {jdSummary ? (
             <p className="text-slate-300 text-sm font-medium">
-              Scoring for{" "}
-              <span className="text-sky-400">{jdSummary.job_title}</span>
+              Scoring for <span className="text-sky-400">{jdSummary.job_title}</span>
             </p>
           ) : (
             <p className="text-slate-400 text-sm">Starting analysis...</p>
@@ -54,7 +84,6 @@ export default function StreamingScreen({ candidates, total, currentCount, jdSum
           </p>
         </div>
 
-        {/* Progress bar */}
         {total > 0 && (
           <div className="mb-8">
             <div className="flex justify-between text-xs text-slate-500 mb-2">
@@ -70,7 +99,6 @@ export default function StreamingScreen({ candidates, total, currentCount, jdSum
           </div>
         )}
 
-        {/* Live results */}
         {candidates.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="relative w-12 h-12">
@@ -97,19 +125,13 @@ export default function StreamingScreen({ candidates, total, currentCount, jdSum
                   <p className="text-sm font-medium text-slate-200 truncate">{c.name}</p>
                   <p className="text-xs text-slate-500">{c.recommendation}</p>
                 </div>
-                <span style={{ color: getScoreInlineColor(c.score) }} className="text-lg font-bold">
-                  {c.score}
-                </span>
-                <span
-                  style={gradeStyles[c.grade] ?? gradeStyles["F"]}
-                  className="text-xs px-2 py-0.5 rounded-full font-medium"
-                >
+                <AnimatedScore target={c.score} />
+                <span style={gradeStyles[c.grade] ?? gradeStyles["F"]} className="text-xs px-2 py-0.5 rounded-full font-medium">
                   {c.grade}
                 </span>
               </div>
             ))}
 
-            {/* Scanning indicator */}
             <div className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-dashed border-slate-700">
               <div className="w-8 h-8 rounded-lg bg-slate-800/50 flex items-center justify-center flex-shrink-0">
                 <svg className="w-4 h-4 text-sky-400 animate-spin" fill="none" viewBox="0 0 24 24">
