@@ -5,3 +5,4 @@ __pycache__/
 .idea/
 demo_files/
 .env.local
+node_modules/
