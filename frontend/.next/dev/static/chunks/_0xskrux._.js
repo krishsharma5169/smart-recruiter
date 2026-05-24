@@ -1445,7 +1445,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CandidatePanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/CandidatePanel.tsx [app-client] (ecmascript)");
 ;
-var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+var _s = __turbopack_context__.k.signature();
 "use client";
 ;
 ;
@@ -1568,38 +1568,7 @@ function exportToCSV(candidates, jdTitle) {
     link.click();
     URL.revokeObjectURL(url);
 }
-function CompareModal({ a, b, jdTitle, onClose }) {
-    _s();
-    const [verdict, setVerdict] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "CompareModal.useEffect": ()=>{
-            const fetchVerdict = {
-                "CompareModal.useEffect.fetchVerdict": async ()=>{
-                    try {
-                        const res = await fetch(`${("TURBOPACK compile-time value", "http://localhost:8000")}/compare`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                candidate_a: a,
-                                candidate_b: b,
-                                job_title: jdTitle
-                            })
-                        });
-                        const data = await res.json();
-                        setVerdict(data);
-                    } catch  {
-                        setVerdict(null);
-                    } finally{
-                        setLoading(false);
-                    }
-                }
-            }["CompareModal.useEffect.fetchVerdict"];
-            fetchVerdict();
-        }
-    }["CompareModal.useEffect"], []);
+function CompareModal({ a, b, verdict, loading, onClose }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1613,7 +1582,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                             children: "Candidate Comparison"
                         }, void 0, false, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 110,
+                            lineNumber: 88,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1631,23 +1600,23 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     d: "M6 18L18 6M6 6l12 12"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 113,
+                                    lineNumber: 91,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 112,
+                                lineNumber: 90,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 111,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 109,
+                    lineNumber: 87,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1659,7 +1628,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                 className: "w-4 h-4 rounded-full border-2 border-sky-500 border-t-transparent animate-spin"
                             }, void 0, false, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 121,
+                                lineNumber: 100,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1667,13 +1636,13 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                 children: "AI is analyzing both candidates and generating a recommendation..."
                             }, void 0, false, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 122,
+                                lineNumber: 101,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 120,
+                        lineNumber: 99,
                         columnNumber: 13
                     }, this) : verdict ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         children: [
@@ -1684,7 +1653,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         className: "w-1.5 h-1.5 rounded-full bg-sky-400"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 127,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1692,7 +1661,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         children: "AI Recommendation"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 107,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1704,13 +1673,13 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 108,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 126,
+                                lineNumber: 105,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1724,13 +1693,13 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         children: verdict.winner
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 134,
+                                        lineNumber: 113,
                                         columnNumber: 22
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 133,
+                                lineNumber: 112,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1738,7 +1707,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                 children: verdict.verdict
                             }, void 0, false, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 136,
+                                lineNumber: 115,
                                 columnNumber: 15
                             }, this),
                             verdict.winner_key_advantages.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1748,7 +1717,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         children: "Key Advantages"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 118,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1763,36 +1732,36 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                                 children: adv
                                             }, i, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 142,
+                                                lineNumber: 121,
                                                 columnNumber: 23
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 119,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 138,
+                                lineNumber: 117,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 125,
+                        lineNumber: 104,
                         columnNumber: 13
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-xs text-slate-500",
                         children: "Could not generate AI verdict."
                     }, void 0, false, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 151,
+                        lineNumber: 130,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 118,
+                    lineNumber: 97,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1808,7 +1777,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: c.name.split(" ").map((n)=>n[0]).join("").slice(0, 2).toUpperCase()
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 138,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1816,7 +1785,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: c.name
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 161,
+                                    lineNumber: 141,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1827,7 +1796,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: c.score
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 162,
+                                    lineNumber: 142,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1839,7 +1808,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                             children: c.grade
                                         }, void 0, false, {
                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                            lineNumber: 164,
+                                            lineNumber: 144,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1848,7 +1817,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                             children: c.recommendation
                                         }, void 0, false, {
                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 145,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1857,24 +1826,24 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                             children: c.confidence
                                         }, void 0, false, {
                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 146,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 163,
+                                    lineNumber: 143,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 157,
+                            lineNumber: 137,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 155,
+                    lineNumber: 135,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1894,12 +1863,12 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 176,
+                                        lineNumber: 157,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 175,
+                                    lineNumber: 156,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1910,18 +1879,18 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 178,
+                                    lineNumber: 159,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 174,
+                            lineNumber: 155,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 172,
+                    lineNumber: 153,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1937,7 +1906,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: "Reasoning"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 186,
+                                    lineNumber: 168,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1945,18 +1914,18 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: c.reasoning
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 187,
+                                    lineNumber: 169,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 185,
+                            lineNumber: 167,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 183,
+                    lineNumber: 165,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1972,7 +1941,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: "Strengths"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 195,
+                                    lineNumber: 178,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1987,30 +1956,30 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                             children: s
                                         }, j, false, {
                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                            lineNumber: 198,
+                                            lineNumber: 181,
                                             columnNumber: 19
                                         }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "text-xs text-slate-600",
                                         children: "None listed"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 199,
+                                        lineNumber: 182,
                                         columnNumber: 22
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 196,
+                                    lineNumber: 179,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 194,
+                            lineNumber: 177,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 192,
+                    lineNumber: 175,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2026,7 +1995,7 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                     children: "Gaps"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 208,
+                                    lineNumber: 192,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2041,51 +2010,52 @@ function CompareModal({ a, b, jdTitle, onClose }) {
                                             children: g
                                         }, j, false, {
                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                            lineNumber: 211,
+                                            lineNumber: 195,
                                             columnNumber: 19
                                         }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "text-xs text-slate-600",
                                         children: "None listed"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 212,
+                                        lineNumber: 196,
                                         columnNumber: 22
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                    lineNumber: 209,
+                                    lineNumber: 193,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/ResultsDashboard.tsx",
-                            lineNumber: 207,
+                            lineNumber: 191,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ResultsDashboard.tsx",
-                    lineNumber: 205,
+                    lineNumber: 189,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/ResultsDashboard.tsx",
-            lineNumber: 107,
+            lineNumber: 85,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ResultsDashboard.tsx",
-        lineNumber: 106,
+        lineNumber: 84,
         columnNumber: 5
     }, this);
 }
-_s(CompareModal, "6gYNw3beajlQtrGgZIBAMoQoJA8=");
 _c = CompareModal;
 function ResultsDashboard({ candidates, jdSummary, onReset }) {
-    _s1();
+    _s();
     const [selectedIndex, setSelectedIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [compareIndices, setCompareIndices] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [showCompare, setShowCompare] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [verdict, setVerdict] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [verdictLoading, setVerdictLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const hireCount = candidates.filter((c)=>c.recommendation === "Strong Hire" || c.recommendation === "Hire").length;
     const topCandidate = candidates[0];
     const handleRowClick = (index)=>{
@@ -2103,6 +2073,32 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
             ];
         });
         setSelectedIndex(null);
+    };
+    const handleCompare = async ()=>{
+        setShowCompare(true);
+        setVerdict(null);
+        setVerdictLoading(true);
+        try {
+            const a = candidates[compareIndices[0]];
+            const b = candidates[compareIndices[1]];
+            const res = await fetch(`${("TURBOPACK compile-time value", "http://localhost:8000")}/compare`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    candidate_a: a,
+                    candidate_b: b,
+                    job_title: jdSummary?.job_title ?? "the role"
+                })
+            });
+            const data = await res.json();
+            setVerdict(data);
+        } catch  {
+            setVerdict(null);
+        } finally{
+            setVerdictLoading(false);
+        }
     };
     const handleExport = ()=>{
         exportToCSV(candidates, jdSummary?.job_title ?? "results");
@@ -2128,13 +2124,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: "Recruiter"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 262,
+                                                lineNumber: 273,
                                                 columnNumber: 20
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 261,
+                                        lineNumber: 272,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2142,20 +2138,20 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Analysis complete"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 264,
+                                        lineNumber: 275,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 260,
+                                lineNumber: 271,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center gap-3",
                                 children: [
                                     compareIndices.length === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>setShowCompare(true),
+                                        onClick: handleCompare,
                                         className: "flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium transition-all duration-150",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -2170,19 +2166,19 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 273,
+                                                    lineNumber: 284,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 272,
+                                                lineNumber: 283,
                                                 columnNumber: 17
                                             }, this),
                                             "Compare Selected"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 268,
+                                        lineNumber: 279,
                                         columnNumber: 15
                                     }, this),
                                     compareIndices.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2191,7 +2187,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Clear"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 279,
+                                        lineNumber: 290,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2210,19 +2206,19 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 291,
+                                                    lineNumber: 302,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 290,
+                                                lineNumber: 301,
                                                 columnNumber: 15
                                             }, this),
                                             "Export CSV"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 286,
+                                        lineNumber: 297,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2241,31 +2237,31 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     d: "M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 300,
+                                                    lineNumber: 311,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 299,
+                                                lineNumber: 310,
                                                 columnNumber: 15
                                             }, this),
                                             "New Analysis"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 295,
+                                        lineNumber: 306,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 266,
+                                lineNumber: 277,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 259,
+                        lineNumber: 270,
                         columnNumber: 9
                     }, this),
                     compareIndices.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2273,7 +2269,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                         children: "Tip: check any 2 candidates to compare them side by side."
                     }, void 0, false, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 308,
+                        lineNumber: 319,
                         columnNumber: 11
                     }, this),
                     compareIndices.length === 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2281,7 +2277,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                         children: "1 candidate selected. Select one more to compare."
                     }, void 0, false, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 311,
+                        lineNumber: 322,
                         columnNumber: 11
                     }, this),
                     compareIndices.length === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2289,7 +2285,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                         children: "2 candidates selected. Click Compare Selected to see the breakdown."
                     }, void 0, false, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 314,
+                        lineNumber: 325,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2303,7 +2299,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Total Candidates"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 319,
+                                        lineNumber: 330,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2311,13 +2307,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: candidates.length
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 320,
+                                        lineNumber: 331,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 318,
+                                lineNumber: 329,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2328,7 +2324,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Recommended to Hire"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 323,
+                                        lineNumber: 334,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2336,7 +2332,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: hireCount
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 324,
+                                        lineNumber: 335,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2344,13 +2340,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Strong Hire + Hire"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 325,
+                                        lineNumber: 336,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 322,
+                                lineNumber: 333,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2361,7 +2357,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Top Candidate"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 328,
+                                        lineNumber: 339,
                                         columnNumber: 13
                                     }, this),
                                     topCandidate ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2371,7 +2367,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: topCandidate.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 331,
+                                                lineNumber: 342,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2385,7 +2381,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 332,
+                                                lineNumber: 343,
                                                 columnNumber: 17
                                             }, this)
                                         ]
@@ -2394,19 +2390,19 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "—"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 348,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 327,
+                                lineNumber: 338,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 317,
+                        lineNumber: 328,
                         columnNumber: 9
                     }, this),
                     jdSummary && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2419,7 +2415,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         className: "w-1.5 h-1.5 rounded-full bg-sky-400"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 345,
+                                        lineNumber: 356,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2430,13 +2426,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 346,
+                                        lineNumber: 357,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 344,
+                                lineNumber: 355,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2449,7 +2445,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: "Required Skills"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 352,
+                                                lineNumber: 363,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2459,25 +2455,25 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         children: s
                                                     }, i, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 355,
+                                                        lineNumber: 366,
                                                         columnNumber: 21
                                                     }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-xs text-slate-600",
                                                     children: "None specified"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 356,
+                                                    lineNumber: 367,
                                                     columnNumber: 24
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 353,
+                                                lineNumber: 364,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 351,
+                                        lineNumber: 362,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2487,7 +2483,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: "Nice to Have"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 360,
+                                                lineNumber: 371,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2497,25 +2493,25 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         children: s
                                                     }, i, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 363,
+                                                        lineNumber: 374,
                                                         columnNumber: 21
                                                     }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "text-xs text-slate-600",
                                                     children: "None specified"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 364,
+                                                    lineNumber: 375,
                                                     columnNumber: 24
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 361,
+                                                lineNumber: 372,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 359,
+                                        lineNumber: 370,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2525,7 +2521,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: "Experience"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 368,
+                                                lineNumber: 379,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2533,13 +2529,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: jdSummary.experience_years
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 369,
+                                                lineNumber: 380,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 367,
+                                        lineNumber: 378,
                                         columnNumber: 15
                                     }, this),
                                     jdSummary.key_responsibilities.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2549,7 +2545,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: "Key Responsibilities"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 373,
+                                                lineNumber: 384,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -2563,14 +2559,14 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                                     children: "·"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                                    lineNumber: 377,
+                                                                    lineNumber: 388,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 r
                                                             ]
                                                         }, i, true, {
                                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                                            lineNumber: 376,
+                                                            lineNumber: 387,
                                                             columnNumber: 23
                                                         }, this)),
                                                     jdSummary.key_responsibilities.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -2582,31 +2578,31 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 381,
+                                                        lineNumber: 392,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 374,
+                                                lineNumber: 385,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 372,
+                                        lineNumber: 383,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 350,
+                                lineNumber: 361,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 343,
+                        lineNumber: 354,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2620,14 +2616,14 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "#"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 392,
+                                        lineNumber: 403,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "text-xs text-slate-500 font-medium uppercase tracking-wider"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 393,
+                                        lineNumber: 404,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2635,7 +2631,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Candidate"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 394,
+                                        lineNumber: 405,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2643,7 +2639,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Score"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 395,
+                                        lineNumber: 406,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2651,7 +2647,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Grade"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 396,
+                                        lineNumber: 407,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2659,7 +2655,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Recommendation"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 397,
+                                        lineNumber: 408,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2667,13 +2663,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                         children: "Confidence"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 398,
+                                        lineNumber: 409,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 391,
+                                lineNumber: 402,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2688,7 +2684,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                 children: i + 1
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 414,
+                                                lineNumber: 425,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2709,22 +2705,22 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                             d: "M5 13l4 4L19 7"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                                            lineNumber: 429,
+                                                            lineNumber: 440,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 428,
+                                                        lineNumber: 439,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 417,
+                                                    lineNumber: 428,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 416,
+                                                lineNumber: 427,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2735,7 +2731,7 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         children: c.name.split(" ").map((n)=>n[0]).join("").slice(0, 2).toUpperCase()
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 436,
+                                                        lineNumber: 447,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2743,13 +2739,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         children: c.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 439,
+                                                        lineNumber: 450,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 435,
+                                                lineNumber: 446,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2764,12 +2760,12 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/ResultsDashboard.tsx",
-                                                            lineNumber: 444,
+                                                            lineNumber: 455,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 443,
+                                                        lineNumber: 454,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2780,13 +2776,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                         children: c.score
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                                        lineNumber: 446,
+                                                        lineNumber: 457,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 442,
+                                                lineNumber: 453,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2797,12 +2793,12 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     children: c.grade
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 450,
+                                                    lineNumber: 461,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 449,
+                                                lineNumber: 460,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2813,12 +2809,12 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     children: c.recommendation
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 454,
+                                                    lineNumber: 465,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 453,
+                                                lineNumber: 464,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2829,29 +2825,29 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                                                     children: c.confidence
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/ResultsDashboard.tsx",
-                                                    lineNumber: 458,
+                                                    lineNumber: 469,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                                lineNumber: 457,
+                                                lineNumber: 468,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, i, true, {
                                         fileName: "[project]/components/ResultsDashboard.tsx",
-                                        lineNumber: 403,
+                                        lineNumber: 414,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/ResultsDashboard.tsx",
-                                lineNumber: 401,
+                                lineNumber: 412,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 390,
+                        lineNumber: 401,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2859,13 +2855,13 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                         children: "Click any row to view full candidate details"
                     }, void 0, false, {
                         fileName: "[project]/components/ResultsDashboard.tsx",
-                        lineNumber: 465,
+                        lineNumber: 476,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ResultsDashboard.tsx",
-                lineNumber: 257,
+                lineNumber: 268,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CandidatePanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2874,27 +2870,28 @@ function ResultsDashboard({ candidates, jdSummary, onReset }) {
                 onClose: ()=>setSelectedIndex(null)
             }, void 0, false, {
                 fileName: "[project]/components/ResultsDashboard.tsx",
-                lineNumber: 470,
+                lineNumber: 481,
                 columnNumber: 7
             }, this),
             showCompare && compareIndices.length === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CompareModal, {
                 a: candidates[compareIndices[0]],
                 b: candidates[compareIndices[1]],
-                jdTitle: jdSummary?.job_title ?? "the role",
+                verdict: verdict,
+                loading: verdictLoading,
                 onClose: ()=>setShowCompare(false)
             }, void 0, false, {
                 fileName: "[project]/components/ResultsDashboard.tsx",
-                lineNumber: 477,
+                lineNumber: 488,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/ResultsDashboard.tsx",
-        lineNumber: 256,
+        lineNumber: 267,
         columnNumber: 5
     }, this);
 }
-_s1(ResultsDashboard, "8HrSrNhzJsT12l0AzlDYPavob3I=");
+_s(ResultsDashboard, "JD6567Hl/3Pt9vpU9hna556TOn8=");
 _c1 = ResultsDashboard;
 var _c, _c1;
 __turbopack_context__.k.register(_c, "CompareModal");

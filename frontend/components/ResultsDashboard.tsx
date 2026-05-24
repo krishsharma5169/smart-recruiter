@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { CandidateResult, JdSummary } from "@/types"
 import { getScoreBarColor } from "@/lib/utils"
 import CandidatePanel from "./CandidatePanel"
@@ -54,7 +54,6 @@ function exportToCSV(candidates: CandidateResult[], jdTitle: string) {
     `"${c.strengths.join(", ").replace(/"/g, '""')}"`,
     `"${c.gaps.join(", ").replace(/"/g, '""')}"`
   ])
-
   const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n")
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
   const url = URL.createObjectURL(blob)
@@ -74,34 +73,13 @@ interface VerdictResult {
   confidence: string
 }
 
-function CompareModal({ a, b, jdTitle, onClose }: {
+function CompareModal({ a, b, verdict, loading, onClose }: {
   a: CandidateResult
   b: CandidateResult
-  jdTitle: string
+  verdict: VerdictResult | null
+  loading: boolean
   onClose: () => void
 }) {
-  const [verdict, setVerdict] = useState<VerdictResult | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchVerdict = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/compare`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ candidate_a: a, candidate_b: b, job_title: jdTitle })
-        })
-        const data = await res.json()
-        setVerdict(data)
-      } catch {
-        setVerdict(null)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchVerdict()
-  }, [])
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#0d1424] border border-slate-700 shadow-2xl">
@@ -115,6 +93,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           </button>
         </div>
 
+        {/* AI Verdict */}
         <div className="px-6 py-5 border-b border-slate-800 bg-slate-900/50">
           {loading ? (
             <div className="flex items-center gap-3">
@@ -152,6 +131,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           )}
         </div>
 
+        {/* Names and scores */}
         <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
           {[a, b].map((c, i) => (
             <div key={i} className="bg-[#0d1424] px-6 py-5 text-center">
@@ -169,6 +149,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           ))}
         </div>
 
+        {/* Score bars */}
         <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
           {[a, b].map((c, i) => (
             <div key={i} className="bg-[#0d1424] px-6 py-4">
@@ -180,6 +161,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           ))}
         </div>
 
+        {/* Reasoning */}
         <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
           {[a, b].map((c, i) => (
             <div key={i} className="bg-[#0d1424] px-6 py-4">
@@ -189,6 +171,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           ))}
         </div>
 
+        {/* Strengths */}
         <div className="grid grid-cols-2 gap-px bg-slate-800 border-b border-slate-800">
           {[a, b].map((c, i) => (
             <div key={i} className="bg-[#0d1424] px-6 py-4">
@@ -202,6 +185,7 @@ function CompareModal({ a, b, jdTitle, onClose }: {
           ))}
         </div>
 
+        {/* Gaps */}
         <div className="grid grid-cols-2 gap-px bg-slate-800">
           {[a, b].map((c, i) => (
             <div key={i} className="bg-[#0d1424] px-6 py-4">
@@ -224,6 +208,8 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [compareIndices, setCompareIndices] = useState<number[]>([])
   const [showCompare, setShowCompare] = useState(false)
+  const [verdict, setVerdict] = useState<VerdictResult | null>(null)
+  const [verdictLoading, setVerdictLoading] = useState(false)
 
   const hireCount = candidates.filter(
     (c) => c.recommendation === "Strong Hire" || c.recommendation === "Hire"
@@ -246,6 +232,31 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
     setSelectedIndex(null)
   }
 
+  const handleCompare = async () => {
+    setShowCompare(true)
+    setVerdict(null)
+    setVerdictLoading(true)
+    try {
+      const a = candidates[compareIndices[0]]
+      const b = candidates[compareIndices[1]]
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/compare`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          candidate_a: a,
+          candidate_b: b,
+          job_title: jdSummary?.job_title ?? "the role"
+        })
+      })
+      const data = await res.json()
+      setVerdict(data)
+    } catch {
+      setVerdict(null)
+    } finally {
+      setVerdictLoading(false)
+    }
+  }
+
   const handleExport = () => {
     exportToCSV(candidates, jdSummary?.job_title ?? "results")
   }
@@ -266,7 +277,7 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
           <div className="flex items-center gap-3">
             {compareIndices.length === 2 && (
               <button
-                onClick={() => setShowCompare(true)}
+                onClick={handleCompare}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium transition-all duration-150"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -477,7 +488,8 @@ export default function ResultsDashboard({ candidates, jdSummary, onReset }: Res
         <CompareModal
           a={candidates[compareIndices[0]]}
           b={candidates[compareIndices[1]]}
-          jdTitle={jdSummary?.job_title ?? "the role"}
+          verdict={verdict}
+          loading={verdictLoading}
           onClose={() => setShowCompare(false)}
         />
       )}
