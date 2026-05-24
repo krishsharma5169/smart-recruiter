@@ -4,9 +4,10 @@ from typing import List
 import asyncio
 import json
 from services.parser import extract_text
-from services.agent import score_resume, extract_jd_requirements
+from services.agent import score_resume, extract_jd_requirements, compare_two_candidates
 from services.ranker import rank_candidates, _get_grade, _get_recommendation
 from models import AnalyzeResponse, JDSummary
+from pydantic import BaseModel as PydanticBaseModel
 
 router = APIRouter()
 
@@ -16,9 +17,11 @@ MIN_JD_LENGTH = 100
 MIN_RESUME_LENGTH = 50
 MAX_JD_LENGTH = 10000
 
+
 @router.get("/health")
 async def health():
     return {"status": "ok"}
+
 
 async def process_resume(resume: UploadFile, jd_text: str) -> dict:
     if resume.size and resume.size > MAX_FILE_SIZE:
@@ -57,6 +60,7 @@ async def process_resume(resume: UploadFile, jd_text: str) -> dict:
             "strengths": [],
             "gaps": ["Could not be parsed"]
         }
+
 
 @router.post("/analyze", response_model=AnalyzeResponse)
 async def analyze(
@@ -102,6 +106,7 @@ async def analyze(
         results=ranked,
         total_candidates=len(ranked)
     )
+
 
 @router.post("/analyze/stream")
 async def analyze_stream(
@@ -164,3 +169,15 @@ async def analyze_stream(
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+
+class CompareRequest(PydanticBaseModel):
+    candidate_a: dict
+    candidate_b: dict
+    job_title: str
+
+
+@router.post("/compare")
+async def compare_candidates(request: CompareRequest):
+    result = await compare_two_candidates(request.candidate_a, request.candidate_b, request.job_title)
+    return result

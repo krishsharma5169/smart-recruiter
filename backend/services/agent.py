@@ -81,6 +81,7 @@ Evaluate this candidate and return only the JSON result."""
     except Exception as e:
         return _fallback(filename, str(e))
 
+
 def _parse_response(raw: str, filename: str) -> dict:
     cleaned = raw.strip()
 
@@ -109,6 +110,7 @@ def _parse_response(raw: str, filename: str) -> dict:
 
     return _fallback(filename, "Could not parse LLM response as JSON.")
 
+
 def _validate_result(result: dict, filename: str) -> dict:
     return {
         "name": result.get("name") or _name_from_filename(filename),
@@ -118,6 +120,7 @@ def _validate_result(result: dict, filename: str) -> dict:
         "strengths": result.get("strengths", []),
         "gaps": result.get("gaps", [])
     }
+
 
 def _fallback(filename: str, reason: str) -> dict:
     return {
@@ -129,9 +132,11 @@ def _fallback(filename: str, reason: str) -> dict:
         "gaps": ["Processing failed"]
     }
 
+
 def _name_from_filename(filename: str) -> str:
     name = filename.replace(".pdf", "").replace(".docx", "").replace("_", " ").replace("-", " ")
     return name.title() if name else "Unknown"
+
 
 async def extract_jd_requirements(jd_text: str) -> dict:
     prompt = f"""You are an expert recruiter. Extract the key requirements from this job description.
@@ -196,5 +201,84 @@ Return ONLY a valid JSON object with no extra text, no markdown, no backticks:
             "key_responsibilities": result.get("key_responsibilities", [])
         }
 
-    except Exception as e:
+    except Exception:
+        return fallback
+
+
+async def compare_two_candidates(candidate_a: dict, candidate_b: dict, job_title: str) -> dict:
+    prompt = f"""You are a senior technical recruiter making a final hiring decision.
+
+Job Title: {job_title}
+
+Candidate A: {candidate_a['name']}
+Score: {candidate_a['score']}
+Strengths: {', '.join(candidate_a.get('strengths', []))}
+Gaps: {', '.join(candidate_a.get('gaps', []))}
+Reasoning: {candidate_a.get('reasoning', '')}
+
+Candidate B: {candidate_b['name']}
+Score: {candidate_b['score']}
+Strengths: {', '.join(candidate_b.get('strengths', []))}
+Gaps: {', '.join(candidate_b.get('gaps', []))}
+Reasoning: {candidate_b.get('reasoning', '')}
+
+Compare both candidates and give a definitive hiring recommendation. Be direct and decisive.
+
+Return ONLY a valid JSON object with no extra text, no markdown, no backticks:
+{{
+  "winner": "exact full name of the recommended candidate",
+  "verdict": "2-3 sentence explanation of why this candidate is the better hire",
+  "winner_key_advantages": ["advantage 1", "advantage 2", "advantage 3"],
+  "loser_key_gaps": ["gap 1", "gap 2"],
+  "confidence": "High" or "Medium" or "Low"
+}}"""
+
+    payload = {
+        "model": MODEL_NAME,
+        "messages": [
+            {"role": "system", "content": "You are a senior technical recruiter making definitive hiring decisions. Return only valid JSON."},
+            {"role": "user", "content": prompt}
+        ],
+        "stream": False
+    }
+
+    fallback = {
+        "winner": candidate_a['name'] if candidate_a['score'] >= candidate_b['score'] else candidate_b['name'],
+        "verdict": "Could not generate comparison. Winner determined by score.",
+        "winner_key_advantages": [],
+        "loser_key_gaps": [],
+        "confidence": "Low"
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(API_URL, json=payload, headers=HEADERS)
+            response.raise_for_status()
+
+        if USE_CHUTES:
+            raw = response.json()["choices"][0]["message"]["content"]
+        else:
+            raw = response.json()["message"]["content"]
+
+        cleaned = raw.strip()
+        if "```" in cleaned:
+            parts = cleaned.split("```")
+            for part in parts:
+                part = part.strip()
+                if part.startswith("json"):
+                    part = part[4:].strip()
+                if part.startswith("{"):
+                    cleaned = part
+                    break
+
+        result = json.loads(cleaned)
+        return {
+            "winner": result.get("winner", fallback["winner"]),
+            "verdict": result.get("verdict", fallback["verdict"]),
+            "winner_key_advantages": result.get("winner_key_advantages", []),
+            "loser_key_gaps": result.get("loser_key_gaps", []),
+            "confidence": result.get("confidence", "Low")
+        }
+
+    except Exception:
         return fallback
