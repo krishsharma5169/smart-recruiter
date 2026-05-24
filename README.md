@@ -16,9 +16,9 @@ Traditional recruitment is slow and inconsistent. Hiring managers spend hours ma
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 14, Tailwind CSS, shadcn/ui |
+| Frontend | Next.js 16, Tailwind CSS |
 | Backend | Python FastAPI |
-| AI Agent | Chutes.ai LLM (Ollama for local development) |
+| AI Agent | Chutes.ai - DeepSeek V3 (Ollama for local development) |
 | File Parsing | PyMuPDF (PDF), python-docx (DOCX) |
 
 ---
@@ -26,12 +26,15 @@ Traditional recruitment is slow and inconsistent. Hiring managers spend hours ma
 ## Features
 
 - Upload a job description (PDF or DOCX)
-- Upload multiple candidate resumes (PDF or DOCX)
-- AI agent scores each candidate from 0 to 100
-- Concurrent resume processing for fast results
+- Upload multiple candidate resumes (PDF or DOCX, up to 10)
+- AI agent extracts and displays job requirements from the JD
+- Each resume scored 0-100 with confidence level
+- Results stream in real time as each candidate is scored
 - Candidates ranked by score with grade and hire recommendation
 - Detailed reasoning, strengths, and gaps per candidate
-- Clean dashboard UI built for real recruiter workflows
+- AI-powered head-to-head candidate comparison with definitive hire verdict
+- CSV export of full ranked results
+- One-click launcher via start.vbs - no terminal required
 
 ---
 
@@ -39,42 +42,32 @@ Traditional recruitment is slow and inconsistent. Hiring managers spend hours ma
 
 - Python 3.10+
 - Node.js 18+
-- Ollama (for local development)
+- Ollama (for local development only)
 
 ---
 
-## Setup Instructions
+## Quick Start (Windows)
 
-### 1. Clone the repo
+The easiest way to run Smart Recruiter is using the included launcher.
+
+### First time setup only
+
+**1. Clone the repo**
 
 ```bash
 git clone https://github.com/krishsharma5169/smart-recruiter.git
 cd smart-recruiter
 ```
 
-### 2. Backend setup
+**2. Create the Python virtual environment**
 
 ```bash
-cd backend
 python -m venv .venv
-```
-
-Activate the virtual environment:
-
-Windows:
-```bash
 .venv\Scripts\activate
+pip install -r backend/requirements.txt
 ```
 
-Mac/Linux:
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+**3. Create backend environment file**
 
 Create a `.env` file inside the `backend/` folder:
 
@@ -87,44 +80,7 @@ FRONTEND_URL=http://localhost:3000
 USE_CHUTES=false
 ```
 
-### 3. Install and start Ollama
-
-Download Ollama from https://ollama.com/download and install it.
-
-Then pull the model:
-
-```bash
-ollama pull llama3.2
-```
-
-Ollama starts automatically on Windows after installation. On Mac/Linux run:
-
-```bash
-ollama serve
-```
-
-### 4. Run the backend
-
-```bash
-cd backend
-uvicorn main:app --reload
-```
-
-Backend runs on http://localhost:8000
-
-Verify it is running:
-```bash
-curl http://localhost:8000/health
-```
-
-Expected response: `{"status": "ok"}`
-
-### 5. Frontend setup
-
-```bash
-cd frontend
-npm install
-```
+**4. Create frontend environment file**
 
 Create a `.env.local` file inside the `frontend/` folder:
 
@@ -132,9 +88,66 @@ Create a `.env.local` file inside the `frontend/` folder:
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-### 6. Run the frontend
+**5. Install frontend dependencies**
 
 ```bash
+cd frontend
+npm install
+cd ..
+```
+
+**6. Install Ollama (if not using Chutes.ai)**
+
+Download from https://ollama.com/download and install it, then pull the model:
+
+```bash
+ollama pull llama3.2
+```
+
+### Every time after setup
+
+Double-click `start.vbs` in the repo root.
+
+Both servers start silently in the background and your browser opens automatically at http://localhost:3000. When you are done, click OK on the popup to stop both servers.
+
+---
+
+## Manual Setup (All Platforms)
+
+### Backend
+
+```bash
+cd backend
+python -m venv .venv
+```
+
+Activate on Windows:
+```bash
+.venv\Scripts\activate
+```
+
+Activate on Mac/Linux:
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Run:
+```bash
+python -m uvicorn main:app --reload
+```
+
+Backend runs on http://localhost:8000
+
+### Frontend
+
+```bash
+cd frontend
+npm install
 npm run dev
 ```
 
@@ -144,14 +157,27 @@ Frontend runs on http://localhost:3000
 
 ## Switching to Chutes.ai
 
-When Chutes.ai API access is provided, update `backend/.env`:
+Update `backend/.env`:
 
 ```
 USE_CHUTES=true
 CHUTES_API_KEY=your_actual_chutes_api_key
 ```
 
-No other code changes are needed. The backend handles the swap automatically.
+No other code changes needed. The backend swaps automatically.
+
+---
+
+## Generating Demo Files
+
+A demo dataset is included to test the full flow. Run from the repo root:
+
+```bash
+pip install reportlab python-docx
+python create_demo_files.py
+```
+
+This creates a `demo_files/` folder with a job description and 6 candidate resumes covering a full range of scores from Strong Hire to Do Not Hire.
 
 ---
 
@@ -159,10 +185,11 @@ No other code changes are needed. The backend handles the swap automatically.
 
 1. User uploads a job description and one or more resumes through the dashboard
 2. Backend parses each file and extracts clean text
-3. AI agent compares each resume against the job description and returns a score, reasoning, strengths, and gaps
-4. All resumes are processed concurrently for speed
-5. Results are ranked by score and enriched with a grade and hire recommendation
-6. Dashboard displays the ranked list with full candidate detail on click
+3. AI agent extracts key requirements from the JD and displays them as a criteria panel
+4. AI agent scores each resume concurrently against the JD, returning score, confidence, reasoning, strengths, and gaps
+5. Results stream to the dashboard in real time as each candidate finishes scoring
+6. Results are sorted by score and enriched with grade and hire recommendation
+7. HR manager can click any candidate for full detail, compare two candidates head-to-head, or export the full ranked list as CSV
 
 ---
 
@@ -180,48 +207,99 @@ No other code changes are needed. The backend handles the swap automatically.
 
 ## API Reference
 
-### POST /analyze
+### POST /analyze/stream (primary)
 
-Accepts a job description and one or more resumes, returns ranked candidates.
+Streams candidate results via Server-Sent Events as each resume finishes scoring.
 
 Request: `multipart/form-data`
 
 | Field | Type | Description |
 |-------|------|-------------|
 | jd | File | Job description (PDF or DOCX, max 5MB) |
-| resumes | File[] | Candidate resumes (PDF or DOCX, max 5MB each) |
+| resumes | File[] | Candidate resumes (PDF or DOCX, max 5MB each, max 10) |
+
+Stream events:
+
+```json
+{ "type": "jd_summary", "data": { "job_title": "...", "required_skills": [], "nice_to_have": [], "experience_years": "...", "key_responsibilities": [] } }
+{ "type": "candidate", "data": { "name": "...", "score": 85, "grade": "A", "recommendation": "Strong Hire", "confidence": "High", "reasoning": "...", "strengths": [], "gaps": [] } }
+```
+
+### POST /analyze
+
+Same as above but returns all results at once after all resumes are processed.
 
 Response:
 
 ```json
 {
+  "jd_summary": {
+    "job_title": "AI Engineer",
+    "required_skills": ["Python", "LLM integration"],
+    "nice_to_have": ["MLflow"],
+    "experience_years": "3+ years",
+    "key_responsibilities": ["Build agentic pipelines"]
+  },
   "total_candidates": 2,
   "results": [
     {
-      "name": "John Doe",
-      "score": 80,
-      "grade": "B",
-      "recommendation": "Hire",
-      "reasoning": "Strong Python background with relevant FastAPI and PostgreSQL experience. Minor gap in REST API design documentation.",
-      "strengths": ["FastAPI", "PostgreSQL", "Docker"],
-      "gaps": ["REST API Design"]
-    },
-    {
-      "name": "Jane Smith",
-      "score": 40,
-      "grade": "D",
-      "recommendation": "Borderline",
-      "reasoning": "Candidate has a JavaScript background with minimal Python experience. Does not meet the core requirement of 3+ years Python.",
-      "strengths": ["JavaScript", "React"],
-      "gaps": ["Python experience", "FastAPI or Django", "REST API design"]
+      "name": "Krish Sharma",
+      "score": 90,
+      "grade": "A",
+      "recommendation": "Strong Hire",
+      "confidence": "High",
+      "reasoning": "Meets all requirements with strong project portfolio.",
+      "strengths": ["LangGraph", "RAG pipelines", "FastAPI"],
+      "gaps": ["MLflow experience"]
     }
   ]
+}
+```
+
+### POST /compare
+
+Accepts two candidate results and a job title, returns an AI-generated hiring verdict.
+
+Request: `application/json`
+
+```json
+{
+  "candidate_a": { ...candidate result object... },
+  "candidate_b": { ...candidate result object... },
+  "job_title": "AI Engineer"
+}
+```
+
+Response:
+
+```json
+{
+  "winner": "Krish Sharma",
+  "verdict": "Krish has stronger hands-on experience with required technologies...",
+  "winner_key_advantages": ["LangGraph pipeline development", "RAG pipelines", "Open-source contributions"],
+  "loser_key_gaps": ["LangGraph experience", "Research background"],
+  "confidence": "High"
 }
 ```
 
 ### GET /health
 
 Returns `{ "status": "ok" }` when the backend is running.
+
+---
+
+## Limitations
+
+- LLM scoring is non-deterministic - the same resume may receive a slightly different score on different runs due to the nature of language models
+- Scanned PDFs are not supported - only text-based PDFs with extractable content work correctly
+- Maximum 10 resumes per request
+- Maximum 5MB per file
+- Chutes.ai requires an internet connection and a valid API key
+- Ollama local inference is slower - expect 30-60 seconds per resume depending on hardware
+- Candidate name extraction depends on resume formatting - if the name cannot be found, the filename is used as a fallback
+- No persistent storage - results are not saved and will be lost on page refresh
+- English language resumes produce the most consistent results - other languages may cause lower scoring accuracy
+- The comparison verdict is AI-generated and should be used as a decision support tool, not a definitive hiring decision
 
 ---
 
@@ -232,6 +310,8 @@ smart-recruiter/
 ├── README.md
 ├── CLAUDE.md
 ├── .gitignore
+├── create_demo_files.py
+├── start.vbs
 ├── backend/
 │   ├── main.py
 │   ├── models.py
@@ -248,8 +328,10 @@ smart-recruiter/
 └── frontend/
     ├── app/
     ├── components/
+    ├── lib/
     ├── types/
-    └── .env.local
+    ├── .env.local
+    └── .gitignore
 ```
 
 ---
