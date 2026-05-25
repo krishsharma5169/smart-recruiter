@@ -16,7 +16,7 @@ Traditional recruitment is slow and inconsistent. Hiring managers spend hours ma
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 16, Tailwind CSS |
+| Frontend | Next.js 16, Tailwind CSS v3 |
 | Backend | Python FastAPI |
 | AI Agent | Chutes.ai - DeepSeek V3 (Ollama for local development) |
 | File Parsing | PyMuPDF (PDF), python-docx (DOCX) |
@@ -42,7 +42,52 @@ Traditional recruitment is slow and inconsistent. Hiring managers spend hours ma
 
 - Python 3.10+
 - Node.js 18+
-- Ollama (for local development only)
+- Ollama (only if not using Chutes.ai)
+
+---
+
+## Choosing Your AI Backend
+
+Smart Recruiter supports two AI backends. Choose one before setup.
+
+### Option A - Chutes.ai (recommended, cloud-based)
+
+- Requires a Chutes.ai API key
+- Faster and more accurate - uses DeepSeek V3
+- No local model download needed
+- Requires internet connection
+
+Set in `backend/.env`:
+```
+USE_CHUTES=true
+CHUTES_API_KEY=your_actual_chutes_api_key
+CHUTES_URL=https://llm.chutes.ai/v1/chat/completions
+```
+
+### Option B - Ollama (local, offline)
+
+- Free, runs entirely on your machine
+- Slower - expect 30-60 seconds per resume depending on hardware
+- Requires Ollama installed and running before starting the app
+
+Download Ollama from https://ollama.com/download, install it, then pull the model:
+
+```bash
+ollama pull llama3.2
+```
+
+Ollama starts automatically on Windows after installation. On Mac/Linux run:
+
+```bash
+ollama serve
+```
+
+Set in `backend/.env`:
+```
+USE_CHUTES=false
+OLLAMA_URL=http://localhost:11434/api/chat
+MODEL_NAME=llama3.2
+```
 
 ---
 
@@ -58,6 +103,8 @@ The easiest way to run Smart Recruiter is using the included launcher.
 git clone https://github.com/krishsharma5169/smart-recruiter.git
 cd smart-recruiter
 ```
+
+> Important: Clone into a folder path with no special characters. Paths containing symbols like `C++`, `C#`, or spaces in folder names may cause the virtual environment activation to fail on Windows. A safe path is `C:\Users\YourName\Documents\smart-recruiter`.
 
 **2. Create the Python virtual environment**
 
@@ -80,6 +127,8 @@ FRONTEND_URL=http://localhost:3000
 USE_CHUTES=false
 ```
 
+Set `USE_CHUTES=true` and add your `CHUTES_API_KEY` if using Chutes.ai. Set `USE_CHUTES=false` if using Ollama.
+
 **4. Create frontend environment file**
 
 Create a `.env.local` file inside the `frontend/` folder:
@@ -96,12 +145,12 @@ npm install
 cd ..
 ```
 
-**6. Install Ollama (if not using Chutes.ai)**
+**6. Start Ollama (if using Ollama)**
 
-Download from https://ollama.com/download and install it, then pull the model:
+Make sure Ollama is running before starting the app. On Windows it starts automatically after installation. If it is not running:
 
 ```bash
-ollama pull llama3.2
+ollama serve
 ```
 
 ### Every time after setup
@@ -143,6 +192,13 @@ python -m uvicorn main:app --reload
 
 Backend runs on http://localhost:8000
 
+Verify:
+```bash
+curl http://localhost:8000/health
+```
+
+Expected: `{"status": "ok"}`
+
 ### Frontend
 
 ```bash
@@ -153,18 +209,26 @@ npm run dev
 
 Frontend runs on http://localhost:3000
 
----
+> Note: This project uses Tailwind CSS v3. The `package.json` already pins Tailwind to v3. If you see a blank page after `npm run dev`, run the following to fix it:
 
-## Switching to Chutes.ai
-
-Update `backend/.env`:
-
-```
-USE_CHUTES=true
-CHUTES_API_KEY=your_actual_chutes_api_key
+```bash
+npm uninstall tailwindcss @tailwindcss/postcss
+npm install tailwindcss@3 autoprefixer postcss
 ```
 
-No other code changes needed. The backend swaps automatically.
+Then clear the cache and restart:
+
+Windows:
+```bash
+Remove-Item -Recurse -Force .next
+npm run dev
+```
+
+Mac/Linux:
+```bash
+rm -rf .next
+npm run dev
+```
 
 ---
 
@@ -177,7 +241,7 @@ pip install reportlab python-docx
 python create_demo_files.py
 ```
 
-This creates a `demo_files/` folder with a job description and 6 candidate resumes covering a full range of scores from Strong Hire to Do Not Hire.
+This creates a `demo_files/` folder with a job description PDF and 6 candidate resumes covering a full range of scores from Strong Hire to Do Not Hire.
 
 ---
 
@@ -189,7 +253,7 @@ This creates a `demo_files/` folder with a job description and 6 candidate resum
 4. AI agent scores each resume concurrently against the JD, returning score, confidence, reasoning, strengths, and gaps
 5. Results stream to the dashboard in real time as each candidate finishes scoring
 6. Results are sorted by score and enriched with grade and hire recommendation
-7. HR manager can click any candidate for full detail, compare two candidates head-to-head, or export the full ranked list as CSV
+7. HR manager can click any candidate for full detail, compare two candidates head-to-head with an AI verdict, or export the full ranked list as CSV
 
 ---
 
@@ -264,8 +328,8 @@ Request: `application/json`
 
 ```json
 {
-  "candidate_a": { ...candidate result object... },
-  "candidate_b": { ...candidate result object... },
+  "candidate_a": { "...candidate result object..." },
+  "candidate_b": { "...candidate result object..." },
   "job_title": "AI Engineer"
 }
 ```
@@ -276,7 +340,7 @@ Response:
 {
   "winner": "Krish Sharma",
   "verdict": "Krish has stronger hands-on experience with required technologies...",
-  "winner_key_advantages": ["LangGraph pipeline development", "RAG pipelines", "Open-source contributions"],
+  "winner_key_advantages": ["LangGraph pipeline development", "RAG pipelines"],
   "loser_key_gaps": ["LangGraph experience", "Research background"],
   "confidence": "High"
 }
@@ -296,10 +360,12 @@ Returns `{ "status": "ok" }` when the backend is running.
 - Maximum 5MB per file
 - Chutes.ai requires an internet connection and a valid API key
 - Ollama local inference is slower - expect 30-60 seconds per resume depending on hardware
+- Ollama must be running before starting the app - if all scores return as 0, check that Ollama is running
 - Candidate name extraction depends on resume formatting - if the name cannot be found, the filename is used as a fallback
 - No persistent storage - results are not saved and will be lost on page refresh
 - English language resumes produce the most consistent results - other languages may cause lower scoring accuracy
 - The comparison verdict is AI-generated and should be used as a decision support tool, not a definitive hiring decision
+- Cloning into a folder path with special characters such as `C++` or `C#` may cause virtual environment activation to fail on Windows
 
 ---
 
